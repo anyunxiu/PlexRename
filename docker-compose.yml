@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  plexrename:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: plexrename
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./config:/config         # 配置文件目录
+      - ./data:/data             # 缓存和数据目录
+      - ./redo:/redo             # 重做命令目录
+      # 媒体目录挂载示例 - 请根据实际情况修改
+      # - /path/to/your/media/source:/media/source:ro    # 源文件目录（只读）
+      # - /path/to/your/plex/media:/media/library        # Plex媒体库目录（用于硬链接）
+    environment:
+      - TZ=Asia/Shanghai
+      - PORT=5000
+      # 使用环境变量设置TMDB API密钥
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      # 使用环境变量设置豆瓣Cookies
+      - DOUBAN_COOKIES=${DOUBAN_COOKIES}
+      - LOG_LEVEL=INFO
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
